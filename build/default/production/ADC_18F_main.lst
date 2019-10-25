@@ -1,0 +1,2113 @@
+MPASM 5.76                  ADC_18F_MAIN.ASM   10-21-2019  0:13:00         PAGE  1
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00001 ;*******************************************************************************
+                      00002 ;   PIC18F ADC routines.  
+                      00003 ;   Date:           2/10/19
+                      00004 ;   File Version:   1.1
+                      00005 ;   Files required: 
+                      00006 ;   Author:         Greg Jolley
+                      00007 ;
+                      00008 ;   Routines added and existing routines renamed
+                      00009 ;   Slight improvement to routines
+                      00010 ;    
+                      00011 ;*******************************************************************************
+                      00012 
+                      00013 
+                      00014     #include <p18cxxx.inc>          ; processor specific variable definitions
+                      00001   INCLUDE <mpasmx.inc>
+                      00001         LIST
+                      00002 ; mpasmx.inc  Standard Header File, Microchip Technology, Inc.
+                      00001         LIST
+                      00002 
+                      00003 ;==========================================================================
+                      00004 ; Build date : Sep 19 2017
+                      00005 ;  MPASM PIC18F47J13 processor include
+                      00006 ; 
+                      00007 ;  (c) Copyright 1999-2017 Microchip Technology, All rights reserved
+                      00008 ;==========================================================================
+                      00009 
+                      02668         LIST
+                      03611   ENDIF
+                      03612  
+                      03613   IFDEF __18F65J94
+                      03614     INCLUDE <p18f65j94.inc>
+                      03615   ENDIF
+                      03616  
+                      03617   IFDEF __18F26K80
+                      03618     INCLUDE <p18f26k80.inc>
+                      03619   ENDIF
+                      03620  
+                      03621   IFDEF __18F4680
+                      03622     INCLUDE <p18f4680.inc>
+                      03623   ENDIF
+                      03624  
+                      03625   IFDEF __18F45K42
+                      03626     INCLUDE <p18f45k42.inc>
+                      03627   ENDIF
+                      03628  
+                      03629   IFDEF __18F66J11
+                      03630     INCLUDE <p18f66j11.inc>
+                      03631   ENDIF
+                      03632  
+                      03633   IFDEF __18LF44J10
+                      03634     INCLUDE <p18lf44j10.inc>
+                      03635   ENDIF
+                      03636  
+MPASM 5.76                  ADC_18F_MAIN.ASM   10-21-2019  0:13:00         PAGE  2
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      03637   IFDEF __18F64J90
+                      03638     INCLUDE <p18f64j90.inc>
+                      03639   ENDIF
+                      03640  
+                      03641   IFDEF __18F44J50
+                      03642     INCLUDE <p18f44j50.inc>
+                      03643   ENDIF
+                      03644  
+                      03645   IFDEF __18LF4620
+                      03646     INCLUDE <p18lf4620.inc>
+                      03647   ENDIF
+                      03648  
+                      03649   IFDEF __18LF66K80
+                      03650     INCLUDE <p18lf66k80.inc>
+                      03651   ENDIF
+                      03652  
+                      03653   IFDEF __18LF26K80
+                      03654     INCLUDE <p18lf26k80.inc>
+                      03655   ENDIF
+                      03656  
+                      03657   IFDEF __18LF26K42
+                      03658     INCLUDE <p18lf26k42.inc>
+                      03659   ENDIF
+                      03660  
+                      03661   IFDEF __18F66J10
+                      03662     INCLUDE <p18f66j10.inc>
+                      03663   ENDIF
+                      03664  
+                      03665   IFDEF __18F8621
+                      03666     INCLUDE <p18f8621.inc>
+                      03667   ENDIF
+                      03668  
+                      03669   IFDEF __18F96J99
+                      03670     INCLUDE <p18f96j99.inc>
+                      03671   ENDIF
+                      03672  
+                      03673   IFDEF __18F2458
+                      03674     INCLUDE <p18f2458.inc>
+                      03675   ENDIF
+                      03676  
+                      03677   IFDEF __18LF8680
+                      03678     INCLUDE <p18lf8680.inc>
+                      03679   ENDIF
+                      03680  
+                      03681   IFDEF __18F24K50
+                      03682     INCLUDE <p18f24k50.inc>
+                      03683   ENDIF
+                      03684  
+                      03685   IFDEF __18F87K22
+                      03686     INCLUDE <p18f87k22.inc>
+                      03687   ENDIF
+                      03688  
+                      03689   IFDEF __18F6680
+MPASM 5.76                  ADC_18F_MAIN.ASM   10-21-2019  0:13:00         PAGE  3
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      03690     INCLUDE <p18f6680.inc>
+                      03691   ENDIF
+                      03692  
+                      03693   IFDEF __18F2580
+                      03694     INCLUDE <p18f2580.inc>
+                      03695   ENDIF
+                      03696  
+                      03697   IFDEF __18F83J90
+                      03698     INCLUDE <p18f83j90.inc>
+                      03699   ENDIF
+                      03700  
+                      03701   IFDEF __18F6310
+                      03702     INCLUDE <p18f6310.inc>
+                      03703   ENDIF
+                      03704  
+                      03705   IFDEF __18F67J94
+                      03706     INCLUDE <p18f67j94.inc>
+                      03707   ENDIF
+                      03708  
+                      03709   IFDEF __18F87J11
+                      03710     INCLUDE <p18f87j11.inc>
+                      03711   ENDIF
+                      03712  
+                      03713   IFDEF __18LF27K42
+                      03714     INCLUDE <p18lf27k42.inc>
+                      03715   ENDIF
+                      03716  
+                      03717   IFDEF __18F43K22
+                      03718     INCLUDE <p18f43k22.inc>
+                      03719   ENDIF
+                      03720  
+                      03721   IFDEF __18F67J93
+                      03722     INCLUDE <p18f67j93.inc>
+                      03723   ENDIF
+                      03724  
+                      03725   IFDEF __18C801
+                      03726     INCLUDE <p18c801.inc>
+                      03727   ENDIF
+                      03728  
+                      03729   IFDEF __18LF2458
+                      03730     INCLUDE <p18lf2458.inc>
+                      03731   ENDIF
+                      03732  
+                      03733   IFDEF __18F57K42
+                      03734     INCLUDE <p18f57k42.inc>
+                      03735   ENDIF
+                      03736  
+                      03737   IFDEF __18LF8520
+                      03738     INCLUDE <p18lf8520.inc>
+                      03739   ENDIF
+                      03740  
+                      03741   IFDEF __18F4553
+                      03742     INCLUDE <p18f4553.inc>
+MPASM 5.76                  ADC_18F_MAIN.ASM   10-21-2019  0:13:00         PAGE  4
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      03743   ENDIF
+                      03744  
+                      03745   IFDEF __18F67K40
+                      03746     INCLUDE <p18f67k40.inc>
+                      03747   ENDIF
+                      03748  
+                      03749   IFDEF __18LF46J53
+                      03750     INCLUDE <p18lf46j53.inc>
+                      03751   ENDIF
+                      03752  
+                      03753   IFDEF __18LF2685
+                      03754     INCLUDE <p18lf2685.inc>
+                      03755   ENDIF
+                      03756  
+                      03757   IFDEF __18F8493
+                      03758     INCLUDE <p18f8493.inc>
+                      03759   ENDIF
+                      03760  
+                      03761   IFDEF __18F45K40
+                      03762     INCLUDE <p18f45k40.inc>
+                      03763   ENDIF
+                      03764  
+                      03765   IFDEF __18F26K83
+                      03766     INCLUDE <p18f26k83.inc>
+                      03767   ENDIF
+                      03768  
+                      03769   IFDEF __18F64J11
+                      03770     INCLUDE <p18f64j11.inc>
+                      03771   ENDIF
+                      03772  
+                      03773   IFDEF __18F248
+                      03774     INCLUDE <p18f248.inc>
+                      03775   ENDIF
+                      03776  
+                      03777   IFDEF __18F86K22
+                      03778     INCLUDE <p18f86k22.inc>
+                      03779   ENDIF
+                      03780  
+                      03781   IFDEF __18F86J93
+                      03782     INCLUDE <p18f86j93.inc>
+                      03783   ENDIF
+                      03784  
+                      03785   IFDEF __18F45K80
+                      03786     INCLUDE <p18f45k80.inc>
+                      03787   ENDIF
+                      03788  
+                      03789   IFDEF __18LF4410
+                      03790     INCLUDE <p18lf4410.inc>
+                      03791   ENDIF
+                      03792  
+                      03793   IFDEF __18F46K42
+                      03794     INCLUDE <p18f46k42.inc>
+                      03795   ENDIF
+MPASM 5.76                  ADC_18F_MAIN.ASM   10-21-2019  0:13:00         PAGE  5
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      03796  
+                      03797   IFDEF __18LF4580
+                      03798     INCLUDE <p18lf4580.inc>
+                      03799   ENDIF
+                      03800  
+                      03801   IFDEF __18LF45K42
+                      03802     INCLUDE <p18lf45k42.inc>
+                      03803   ENDIF
+                      03804  
+                      03805   IFDEF __18LF8585
+                      03806     INCLUDE <p18lf8585.inc>
+                      03807   ENDIF
+                      03808  
+                      03809   IFDEF __18F4320
+                      03810     INCLUDE <p18f4320.inc>
+                      03811   ENDIF
+                      03812  
+                      03813   IFDEF __18LF14K50
+                      03814     INCLUDE <p18lf14k50.inc>
+                      03815   ENDIF
+                      03816  
+                      03817   IFDEF __18LF4431
+                      03818     INCLUDE <p18lf4431.inc>
+                      03819   ENDIF
+                      03820  
+                      03821   IFDEF __18F4420
+                      03822     INCLUDE <p18f4420.inc>
+                      03823   ENDIF
+                      03824  
+                      03825   IFDEF __18LF8490
+                      03826     INCLUDE <p18lf8490.inc>
+                      03827   ENDIF
+                      03828  
+                      03829   IFDEF __18LF6622
+                      03830     INCLUDE <p18lf6622.inc>
+                      03831   ENDIF
+                      03832  
+                      03833   IFDEF __18F45J10
+                      03834     INCLUDE <p18f45j10.inc>
+                      03835   ENDIF
+                      03836  
+                      03837   IFDEF __18F8627
+                      03838     INCLUDE <p18f8627.inc>
+                      03839   ENDIF
+                      03840  
+                      03841   IFDEF __18F66J99
+                      03842     INCLUDE <p18f66j99.inc>
+                      03843   ENDIF
+                      03844  
+                      03845   IFDEF __18F66J15
+                      03846     INCLUDE <p18f66j15.inc>
+                      03847   ENDIF
+                      03848  
+MPASM 5.76                  ADC_18F_MAIN.ASM   10-21-2019  0:13:00         PAGE  6
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      03849   IFDEF __18F65J50
+                      03850     INCLUDE <p18f65j50.inc>
+                      03851   ENDIF
+                      03852  
+                      03853   IFDEF __18LF2321
+                      03854     INCLUDE <p18lf2321.inc>
+                      03855   ENDIF
+                      03856  
+                      03857   IFDEF __18LF25K80
+                      03858     INCLUDE <p18lf25k80.inc>
+                      03859   ENDIF
+                      03860  
+                      03861   IFDEF __18LF4420
+                      03862     INCLUDE <p18lf4420.inc>
+                      03863   ENDIF
+                      03864  
+                      03865   IFDEF __18F6622
+                      03866     INCLUDE <p18f6622.inc>
+                      03867   ENDIF
+                      03868  
+                      03869   IFDEF __18F66K22
+                      03870     INCLUDE <p18f66k22.inc>
+                      03871   ENDIF
+                      03872  
+                      03873   IFDEF __18LF8723
+                      03874     INCLUDE <p18lf8723.inc>
+                      03875   ENDIF
+                      03876  
+                      03877   IFDEF __18F2410
+                      03878     INCLUDE <p18f2410.inc>
+                      03879   ENDIF
+                      03880  
+                      03881   IFDEF __18LF248
+                      03882     INCLUDE <p18lf248.inc>
+                      03883   ENDIF
+                      03884  
+                      00015     ;#include <ADC_18F_def.inc>     ; 
+                      00016     
+  0000                00017     global  ADC_read, ADC_wait_read, ADC_go_read, ADC_channel_sel, ADC_channel_sel_go
+  0000                00018     global  ADC_channel_sel_go_read, ADC_calibrate
+                      00019     
+                      00020         CODE
+                      00021                 
+                      00022 ; [0] input the channel number AN0,...,AN12, reserved, Vddcore, Vbg (1.2 V)
+                      00023 ; [1] returns Low Byte
+                      00024 ; [2] returns High Byte 
+                      00025 ; Assumes that the ADC is turned on. (ADCON0, 0 = 1)
+                      00026 ;-------------------------------------------; 
+000000                00027 ADC_channel_sel_go_read:                    ; 
+000000 5000           00028         movf    [D'0'], W                   ;
+000002 0B0F           00029         andlw   B'00001111'                 ; Permit only valid channels / do not
+000004 6E01           00030         movwf   [D'1']                      ; mess with other register bits
+000006 4601           00031         rlncf   [D'1'], F                   ;
+MPASM 5.76                  ADC_18F_MAIN.ASM   10-21-2019  0:13:00         PAGE  7
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+000008 4601           00032         rlncf   [D'1'], F                   ;    
+                      00033                                             ;
+00000A 50C2           00034         movf    ADCON0, W, A                ;
+00000C 0BC3           00035         andlw   B'11000011'                 ; clear the channel selection bits
+00000E 1001           00036         iorwf   [D'1'], W                   ;
+                      00037                                             ;   
+000010                00038 ADC_channel_sel_go_read_1                   ;
+000010 B2C2           00039         btfsc   ADCON0, GO, A               ;    
+000012 D???           00040         bra     ADC_channel_sel_go_read_1   ; wait for ADC free
+                      00041                                             ;
+000014 6EC2           00042         movwf   ADCON0, A                   ;
+000016 82C2           00043         bsf     ADCON0, GO, A               ;
+000018                00044 channel_sel_and_go_read_loop                ;
+000018 0000           00045         nop                                 ;
+00001A B2C2           00046         btfsc   ADCON0, GO, A               ;
+00001C D???           00047         bra     channel_sel_and_go_read_loop    ; wait for completion 
+00001E 50C3           00048         movf    ADRESL, W, A                ;
+000020 6E01           00049         movwf   [D'1']                      ;
+000022 50C4           00050         movf    ADRESH, W, A                ;
+000024 6E02           00051         movwf   [D'2']                      ;
+                      00052                                             ;
+000026 0012           00053         return                              ;
+                      00054 ;-------------------------------------------;   
+                      00055         
+                      00056         
+                      00057 ; [0] input the channel number AN0,...,AN12, reserved, Vddcore, Vbg (1.2 V)
+                      00058 ; Assumes that the ADC is turned on. (ADCON0, 0 = 1)
+                      00059 ; A separate routine is required to read the ADC result
+                      00060 ;-------------------------------------------; 
+000028                00061 ADC_channel_sel_go:                         ;
+000028 E981           00062         subfsr  2, D'1'                     ;
+00002A 5001           00063         movf    [D'1'], W                   ;
+00002C 0B0F           00064         andlw   B'00001111'                 ; Permit only valid channels / do not
+00002E 6E00           00065         movwf   [D'0']                      ; mess with other register bits
+000030 4600           00066         rlncf   [D'0'], F                   ;
+000032 4600           00067         rlncf   [D'0'], F                   ;    
+                      00068                                             ;
+000034 50C2           00069         movf    ADCON0, W, A                ;
+000036 0BC3           00070         andlw   B'11000011'                 ; clear the channel selection bits
+000038 1000           00071         iorwf   [D'0'], W                   ;
+                      00072                                             ;   
+00003A                00073 ADC_channel_sel_go_1                        ;
+00003A B2C2           00074         btfsc   ADCON0, GO, A               ;    
+00003C D???           00075         bra     ADC_channel_sel_go_1        ; wait for ADC free
+                      00076                                             ;
+00003E 6EC2           00077         movwf   ADCON0, A                   ;
+000040 82C2           00078         bsf     ADCON0, GO, A               ;
+                      00079                                             ;
+000042 E8C1           00080         addulnk D'1'                        ;
+                      00081 ;-------------------------------------------;           
+                      00082         
+                      00083 ; [0] input the channel number AN0,...,AN12, reserved, Vddcore, Vbg (1.2 V)
+                      00084 ; Only selects an analog channel
+MPASM 5.76                  ADC_18F_MAIN.ASM   10-21-2019  0:13:00         PAGE  8
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00085 ;-------------------------------------------; 
+000044                00086 ADC_channel_sel:                            ;
+000044 E981           00087         subfsr  2, D'1'                     ;
+000046 5001           00088         movf    [D'1'], W                   ;
+000048 0B0F           00089         andlw   B'00001111'                 ; Permit only valid channels / do not
+00004A 6E00           00090         movwf   [D'0']                      ; mess with other register bits
+00004C 4600           00091         rlncf   [D'0'], F                   ;
+00004E 4600           00092         rlncf   [D'0'], F                   ;    
+                      00093                                             ;
+000050 50C2           00094         movf    ADCON0, W, A                ;
+000052 0BC3           00095         andlw   B'11000011'                 ; clear the channel selection bits
+000054 1000           00096         iorwf   [D'0'], W                   ;
+                      00097                                             ;   
+000056                00098 ADC_channel_sel_1                           ;
+000056 B2C2           00099         btfsc   ADCON0, GO, A               ;    
+000058 D???           00100         bra     ADC_channel_sel_1           ; wait for ADC free
+                      00101                                             ;
+00005A 6EC2           00102         movwf   ADCON0, A                   ;
+                      00103                                             ;
+00005C E8C1           00104         addulnk D'1'                        ;
+                      00105 ;-------------------------------------------;   
+                      00106         
+                      00107 ; [0] returns Low Byte
+                      00108 ; [1] returns High Byte 
+                      00109 ; Assumes that the ADC is turned on. (ADCON0, 0 = 1) and no conversion in progress
+                      00110 ;-------------------------------------------; 
+00005E                00111 ADC_go_read:                                ; 
+00005E 82C2           00112         bsf     ADCON0, GO, A               ; Start conversion
+                      00113                                             ;
+000060                00114 ADC_go_read_loop                            ;
+000060 0000           00115         nop                                 ;
+000062 B2C2           00116         btfsc   ADCON0, GO, A               ;
+000064 D???           00117         bra     ADC_go_read_loop            ; wait for completion 
+000066 50C3           00118         movf    ADRESL, W, A                ;
+000068 6E00           00119         movwf   [D'0']                      ;
+00006A 50C4           00120         movf    ADRESH, W, A                ;
+00006C 6E01           00121         movwf   [D'1']                      ;
+                      00122                                             ;
+00006E 0012           00123         return                              ;
+                      00124 ;-------------------------------------------;   
+                      00125         
+                      00126 ; [0] returns Low Byte
+                      00127 ; [1] returns High Byte 
+                      00128 ; Waits for a conversion to complete before reading result      
+                      00129 ;-------------------------------------------; 
+000070                00130 ADC_wait_read:                              ; 
+000070 B2C2           00131         btfsc   ADCON0, GO, A               ;
+000072 D???           00132         bra     ADC_wait_read               ; wait for completion 
+000074 50C3           00133         movf    ADRESL, W, A                ;
+000076 6E00           00134         movwf   [D'0']                      ;
+000078 50C4           00135         movf    ADRESH, W, A                ;
+00007A 6E01           00136         movwf   [D'1']                      ;
+                      00137                                             ;
+MPASM 5.76                  ADC_18F_MAIN.ASM   10-21-2019  0:13:00         PAGE  9
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+00007C 0012           00138         return                              ;
+                      00139 ;-------------------------------------------;   
+                      00140         
+                      00141 ; [0] returns Low Byte
+                      00142 ; [1] returns High Byte 
+                      00143 ;-------------------------------------------; 
+00007E                00144 ADC_read:                                   ; 
+00007E 50C3           00145         movf    ADRESL, W, A                ;
+000080 6E00           00146         movwf   [D'0']                      ;
+000082 50C4           00147         movf    ADRESH, W, A                ;
+000084 6E01           00148         movwf   [D'1']                      ;
+                      00149                                             ;
+000086 0012           00150         return                              ;
+                      00151 ;-------------------------------------------;           
+                      00152         
+                      00153         
+                      00154 ; Performs an ADC offset calibration.
+                      00155 ; Result is stored and handled internally by the ADC
+                      00156 ; Assumed ADC is on
+                      00157 ;-------------------------------------------;
+000088                00158 ADC_calibrate:                              ;
+000088 E982           00159         subfsr  2, D'2'                     ;
+00008A 8CC1           00160         bsf     ADCON1, ADCAL, A            ;
+00008C 0E00           00161         movlw   D'0'                        ;
+00008E 6E00           00162         movwf   [D'0']                      ;
+000090 EC?? F???      00163         call    ADC_channel_sel_go_read     ;
+000094 9CC1           00164         bcf     ADCON1, ADCAL, A            ; Perform usual ADC measurements
+                      00165                                             ;
+000096 E8C2           00166         addulnk D'2'                        ;
+                      00167 ;-------------------------------------------;
+                      00168         
+                      00169         END
+MPASM 5.76                  ADC_18F_MAIN.ASM   10-21-2019  0:13:00         PAGE 10
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+A                                 00000000
+ABDEN                             00000000
+ABDOVF                            00000007
+ACCESS                            00000000
+ACKDT                             00000005
+ACKEN                             00000004
+ACKSTAT                           00000006
+ACQT0                             00000003
+ACQT1                             00000004
+ACQT2                             00000005
+ADCAL                             00000006
+ADCMD                             00000000
+ADCON0                            00000FC2
+ADCON1                            00000FC1
+ADCS0                             00000000
+ADCS1                             00000001
+ADCS2                             00000002
+ADCTRIG                           00000EB8
+ADC_calibrate                     00000088
+ADC_channel_sel                   00000044
+ADC_channel_sel_1                 00000056
+ADC_channel_sel_go                00000028
+ADC_channel_sel_go_1              0000003A
+ADC_channel_sel_go_read           00000000
+ADC_channel_sel_go_read_1         00000010
+ADC_go_read                       0000005E
+ADC_go_read_loop                  00000060
+ADC_read                          0000007E
+ADC_wait_read                     00000070
+ADDEN                             00000003
+ADDEN1                            00000003
+ADDEN2                            00000003
+ADEN                              00000003
+ADFM                              00000007
+ADIE                              00000006
+ADIF                              00000006
+ADIP                              00000006
+ADMSK1                            00000001
+ADMSK2                            00000002
+ADMSK3                            00000003
+ADMSK4                            00000004
+ADMSK5                            00000005
+ADON                              00000000
+ADRES                             00000FC3
+ADRESH                            00000FC4
+ADRESL                            00000FC3
+ADRMUX0                           00000003
+ADRMUX1                           00000004
+ALP                               00000005
+ALRMCFG                           00000F47
+ALRMEN                            00000007
+ALRMPTR0                          00000000
+ALRMPTR1                          00000001
+MPASM 5.76                  ADC_18F_MAIN.ASM   10-21-2019  0:13:00         PAGE 11
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+ALRMRPT                           00000F46
+ALRMVALH                          00000F45
+ALRMVALL                          00000F44
+AMASK0                            00000002
+AMASK1                            00000003
+AMASK2                            00000004
+AMASK3                            00000005
+AN0                               00000000
+AN1                               00000001
+AN10                              00000001
+AN11                              00000002
+AN12                              00000000
+AN2                               00000002
+AN3                               00000003
+AN4                               00000005
+AN5                               00000000
+AN6                               00000001
+AN7                               00000002
+AN8                               00000002
+AN9                               00000003
+ANCON0                            00000F48
+ANCON1                            00000F49
+ARPT0                             00000000
+ARPT1                             00000001
+ARPT2                             00000002
+ARPT3                             00000003
+ARPT4                             00000004
+ARPT5                             00000005
+ARPT6                             00000006
+ARPT7                             00000007
+BANKED                            00000001
+BAUDCON                           00000F7E
+BAUDCON1                          00000F7E
+BAUDCON2                          00000F7C
+BAUDCTL                           00000F7E
+BCL1IE                            00000003
+BCL1IF                            00000003
+BCL1IP                            00000003
+BCL2IE                            00000006
+BCL2IF                            00000006
+BCL2IP                            00000006
+BCLIE                             00000003
+BCLIF                             00000003
+BCLIP                             00000003
+BEP                               00000002
+BF                                00000000
+BGVST                             00000006
+BOR                               00000000
+BRG16                             00000003
+BRGH                              00000002
+BRGH1                             00000002
+BRGH2                             00000002
+BSR                               00000FE0
+MPASM 5.76                  ADC_18F_MAIN.ASM   10-21-2019  0:13:00         PAGE 12
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+BUSY                              00000007
+C                                 00000000
+C10TSEL0                          00000004
+C1INA                             00000000
+C1INB                             00000003
+C1INC                             00000005
+C1IND                             00000002
+C1TSEL0                           00000000
+C1TSEL1                           00000001
+C1TSEL2                           00000002
+C2INA                             00000001
+C2INB                             00000002
+C2INC                             00000002
+C2IND                             00000002
+C2TSEL0                           00000003
+C2TSEL1                           00000004
+C2TSEL2                           00000005
+C3INA                             00000003
+C3INB                             00000002
+C3INC                             00000001
+C3IND                             00000000
+C3TSEL0                           00000006
+C3TSEL1                           00000007
+C4TSEL0                           00000000
+C4TSEL1                           00000001
+C5TSEL0                           00000002
+C6TSEL0                           00000004
+C7TSEL0                           00000006
+C7TSEL1                           00000007
+C8TSEL0                           00000000
+C8TSEL1                           00000001
+C9TSEL0                           00000002
+CAL0                              00000000
+CAL1                              00000001
+CAL2                              00000002
+CAL3                              00000003
+CAL4                              00000004
+CAL5                              00000005
+CAL6                              00000006
+CAL7                              00000007
+CCH0                              00000000
+CCH1                              00000001
+CCP10                             00000007
+CCP10CON                          00000F00
+CCP10IE                           00000007
+CCP10IF                           00000007
+CCP10IP                           00000007
+CCP10M0                           00000000
+CCP10M1                           00000001
+CCP10M2                           00000002
+CCP10M3                           00000003
+CCP10MD                           00000007
+CCP10OD                           00000003
+MPASM 5.76                  ADC_18F_MAIN.ASM   10-21-2019  0:13:00         PAGE 13
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+CCP1CON                           00000FBA
+CCP1IE                            00000002
+CCP1IF                            00000002
+CCP1IP                            00000002
+CCP1M0                            00000000
+CCP1M1                            00000001
+CCP1M2                            00000002
+CCP1M3                            00000003
+CCP1X                             00000005
+CCP1Y                             00000004
+CCP2CON                           00000FB4
+CCP2IE                            00000000
+CCP2IF                            00000000
+CCP2IP                            00000000
+CCP2M0                            00000000
+CCP2M1                            00000001
+CCP2M2                            00000002
+CCP2M3                            00000003
+CCP2X                             00000005
+CCP2Y                             00000004
+CCP3CON                           00000F15
+CCP3IE                            00000000
+CCP3IF                            00000000
+CCP3IP                            00000000
+CCP3M0                            00000000
+CCP3M1                            00000001
+CCP3M2                            00000002
+CCP3M3                            00000003
+CCP4                              00000004
+CCP4CON                           00000F12
+CCP4IE                            00000001
+CCP4IF                            00000001
+CCP4IP                            00000001
+CCP4M0                            00000000
+CCP4M1                            00000001
+CCP4M2                            00000002
+CCP4M3                            00000003
+CCP4MD                            00000001
+CCP4OD                            00000003
+CCP5                              00000005
+CCP5CON                           00000F0F
+CCP5IE                            00000002
+CCP5IF                            00000002
+CCP5IP                            00000002
+CCP5M0                            00000000
+CCP5M1                            00000001
+CCP5M2                            00000002
+CCP5M3                            00000003
+CCP5MD                            00000002
+CCP5OD                            00000004
+CCP6                              00000006
+CCP6CON                           00000F0C
+CCP6IE                            00000003
+MPASM 5.76                  ADC_18F_MAIN.ASM   10-21-2019  0:13:00         PAGE 14
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+CCP6IF                            00000003
+CCP6IP                            00000003
+CCP6M0                            00000000
+CCP6M1                            00000001
+CCP6M2                            00000002
+CCP6M3                            00000003
+CCP6MD                            00000003
+CCP6OD                            00000005
+CCP7                              00000007
+CCP7CON                           00000F09
+CCP7IE                            00000004
+CCP7IF                            00000004
+CCP7IP                            00000004
+CCP7M0                            00000000
+CCP7M1                            00000001
+CCP7M2                            00000002
+CCP7M3                            00000003
+CCP7MD                            00000004
+CCP7OD                            00000006
+CCP8                              00000001
+CCP8CON                           00000F06
+CCP8IE                            00000005
+CCP8IF                            00000005
+CCP8IP                            00000005
+CCP8M0                            00000000
+CCP8M1                            00000001
+CCP8M2                            00000002
+CCP8M3                            00000003
+CCP8MD                            00000005
+CCP8OD                            00000007
+CCP9                              00000006
+CCP9CON                           00000F03
+CCP9IE                            00000006
+CCP9IF                            00000006
+CCP9IP                            00000006
+CCP9M0                            00000000
+CCP9M1                            00000001
+CCP9M2                            00000002
+CCP9M3                            00000003
+CCP9MD                            00000006
+CCP9OD                            00000002
+CCPR1                             00000FBB
+CCPR10H                           00000F02
+CCPR10L                           00000F01
+CCPR1H                            00000FBC
+CCPR1L                            00000FBB
+CCPR2                             00000FB5
+CCPR2H                            00000FB6
+CCPR2L                            00000FB5
+CCPR3H                            00000F17
+CCPR3L                            00000F16
+CCPR4H                            00000F14
+CCPR4L                            00000F13
+MPASM 5.76                  ADC_18F_MAIN.ASM   10-21-2019  0:13:00         PAGE 15
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+CCPR5H                            00000F11
+CCPR5L                            00000F10
+CCPR6H                            00000F0E
+CCPR6L                            00000F0D
+CCPR7H                            00000F0B
+CCPR7L                            00000F0A
+CCPR8H                            00000F08
+CCPR8L                            00000F07
+CCPR9H                            00000F05
+CCPR9L                            00000F04
+CCPTMRS0                          00000F52
+CCPTMRS1                          00000F51
+CCPTMRS2                          00000F50
+CHIME                             00000006
+CHS0                              00000002
+CHS1                              00000003
+CHS2                              00000004
+CHS3                              00000005
+CK1                               00000006
+CKE                               00000006
+CKP                               00000004
+CLKI                              00000007
+CLKO                              00000006
+CM                                00000005
+CM1CON                            00000FD2
+CM1CON1                           00000FD2
+CM1IE                             00000005
+CM1IF                             00000005
+CM1IP                             00000005
+CM2CON                            00000FD1
+CM2CON1                           00000FD1
+CM2IE                             00000006
+CM2IF                             00000006
+CM2IP                             00000006
+CM3CON                            00000F25
+CM3IE                             00000005
+CM3IF                             00000005
+CM3IP                             00000005
+CMP1MD                            00000000
+CMP2MD                            00000001
+CMP3MD                            00000002
+CMPL0                             00000006
+CMPL1                             00000007
+CMSTAT                            00000F70
+CMSTATUS                          00000F70
+COE                               00000006
+CON                               00000007
+COUT1                             00000000
+COUT2                             00000001
+COUT3                             00000002
+CPOL                              00000005
+CREF                              00000002
+CREN                              00000004
+MPASM 5.76                  ADC_18F_MAIN.ASM   10-21-2019  0:13:00         PAGE 16
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+CREN1                             00000004
+CREN2                             00000004
+CS1                               00000006
+CS1P                              00000003
+CSF0                              00000006
+CSF1                              00000007
+CSRC                              00000007
+CSRC1                             00000007
+CSRC2                             00000007
+CTED1                             00000002
+CTED2                             00000003
+CTMUCONH                          00000FB3
+CTMUCONL                          00000FB2
+CTMUDS                            00000007
+CTMUEN                            00000007
+CTMUICON                          00000FB1
+CTMUIE                            00000002
+CTMUIF                            00000002
+CTMUIP                            00000002
+CTMUMD                            00000006
+CTMUSIDL                          00000005
+CTPLS                             00000002
+CTTRIG                            00000000
+CVR0                              00000000
+CVR1                              00000001
+CVR2                              00000002
+CVR3                              00000003
+CVRCON                            00000F53
+CVREF                             00000002
+CVREN                             00000007
+CVROE                             00000006
+CVRR                              00000005
+CVRSS                             00000004
+D                                 00000005
+DATA_ADDRESS                      00000005
+DC                                00000001
+DC10B0                            00000004
+DC10B1                            00000005
+DC1B0                             00000004
+DC1B1                             00000005
+DC2B0                             00000004
+DC2B1                             00000005
+DC3B0                             00000004
+DC3B1                             00000005
+DC4B0                             00000004
+DC4B1                             00000005
+DC5B0                             00000004
+DC5B1                             00000005
+DC6B0                             00000004
+DC6B1                             00000005
+DC7B0                             00000004
+DC7B1                             00000005
+DC8B0                             00000004
+MPASM 5.76                  ADC_18F_MAIN.ASM   10-21-2019  0:13:00         PAGE 17
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+DC8B1                             00000005
+DC9B0                             00000004
+DC9B1                             00000005
+DDRA                              TRISA
+DDRB                              TRISB
+DDRC                              TRISC
+DDRD                              TRISD
+DDRE                              TRISE
+DLYCYC0                           00000004
+DLYCYC1                           00000005
+DLYCYC2                           00000006
+DLYCYC3                           00000007
+DLYINTEN                          00000001
+DMABCH                            00000F66
+DMABCL                            00000F67
+DMACON1                           00000F88
+DMACON2                           00000F86
+DMAEN                             00000000
+DONE                              00000001
+DS                                00000003
+DSBOR                             00000001
+DSCONH                            00000F4D
+DSCONL                            00000F4C
+DSEN                              00000007
+DSFLT                             00000007
+DSGPR0                            00000F4E
+DSGPR1                            00000F4F
+DSINT0                            00000000
+DSMCLR                            00000002
+DSPOR                             00000000
+DSRTC                             00000003
+DSULP                             00000005
+DSULPEN                           00000001
+DSWAKEH                           00000F4B
+DSWAKEL                           00000F4A
+DSWDT                             00000004
+DT1                               00000007
+DUPLEX0                           00000002
+DUPLEX1                           00000003
+D_A                               00000005
+D_NOT_A                           00000005
+ECCP1AS                           00000FBE
+ECCP1AS0                          00000004
+ECCP1AS1                          00000005
+ECCP1AS2                          00000006
+ECCP1ASE                          00000007
+ECCP1CON                          00000FBA
+ECCP1DEL                          00000FBD
+ECCP1MD                           00000005
+ECCP1OD                           00000000
+ECCP2AS                           00000FB8
+ECCP2AS0                          00000004
+ECCP2AS1                          00000005
+MPASM 5.76                  ADC_18F_MAIN.ASM   10-21-2019  0:13:00         PAGE 18
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+ECCP2AS2                          00000006
+ECCP2ASE                          00000007
+ECCP2CON                          00000FB4
+ECCP2DEL                          00000FB7
+ECCP2MD                           00000006
+ECCP2OD                           00000001
+ECCP3AS                           00000F19
+ECCP3AS0                          00000004
+ECCP3AS1                          00000005
+ECCP3AS2                          00000006
+ECCP3ASE                          00000007
+ECCP3DEL                          00000F18
+ECCP3MD                           00000007
+ECCP3OD                           00000002
+EDG1POL                           00000004
+EDG1SEL0                          00000002
+EDG1SEL1                          00000003
+EDG1STAT                          00000000
+EDG2POL                           00000007
+EDG2SEL0                          00000005
+EDG2SEL1                          00000006
+EDG2STAT                          00000001
+EDGEN                             00000003
+EDGSEQEN                          00000002
+EECON1                            00000FA6
+EECON2                            00000FA7
+EVPOL0                            00000003
+EVPOL1                            00000004
+FAST                              00000001
+FERR                              00000002
+FERR1                             00000002
+FERR2                             00000002
+FREE                              00000004
+FSR0                              00000000
+FSR0H                             00000FEA
+FSR0L                             00000FE9
+FSR1                              00000001
+FSR1H                             00000FE2
+FSR1L                             00000FE1
+FSR2                              00000002
+FSR2H                             00000FDA
+FSR2L                             00000FD9
+GCEN                              00000007
+GIE                               00000007
+GIEH                              00000007
+GIEL                              00000006
+GIE_GIEH                          00000007
+GO                                00000001
+GO_DONE                           00000001
+GO_NOT_DONE                       00000001
+HALFSEC                           00000003
+HLVDCON                           00000F85
+HLVDEN                            00000004
+MPASM 5.76                  ADC_18F_MAIN.ASM   10-21-2019  0:13:00         PAGE 19
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+HLVDIE                            00000002
+HLVDIF                            00000002
+HLVDIN                            00000005
+HLVDIP                            00000002
+HLVDL0                            00000000
+HLVDL1                            00000001
+HLVDL2                            00000002
+HLVDL3                            00000003
+I2C_DAT                           00000005
+I2C_READ                          00000002
+I2C_START                         00000003
+I2C_STOP                          00000004
+IB0F                              00000000
+IB1F                              00000001
+IB2F                              00000002
+IB3F                              00000003
+IBF                               00000007
+IBOV                              00000006
+IDISSEN                           00000001
+IDLEN                             00000007
+INCM0                             00000003
+INCM1                             00000004
+INDF0                             00000FEF
+INDF1                             00000FE7
+INDF2                             00000FDF
+INT0                              00000000
+INT0E                             00000004
+INT0F                             00000001
+INT0IE                            00000004
+INT0IF                            00000001
+INT1E                             00000003
+INT1F                             00000000
+INT1IE                            00000003
+INT1IF                            00000000
+INT1IP                            00000006
+INT1P                             00000006
+INT2E                             00000004
+INT2F                             00000001
+INT2IE                            00000004
+INT2IF                            00000001
+INT2IP                            00000007
+INT2P                             00000007
+INT3E                             00000005
+INT3F                             00000002
+INT3IE                            00000005
+INT3IF                            00000002
+INT3IP                            00000001
+INT3P                             00000001
+INTCON                            00000FF2
+INTCON2                           00000FF1
+INTCON3                           00000FF0
+INTEDG0                           00000006
+INTEDG1                           00000005
+MPASM 5.76                  ADC_18F_MAIN.ASM   10-21-2019  0:13:00         PAGE 20
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+INTEDG2                           00000004
+INTEDG3                           00000003
+INTLVL0                           00000000
+INTLVL1                           00000001
+INTLVL2                           00000002
+INTLVL3                           00000003
+INTSRC                            00000007
+IOLOCK                            00000000
+IPEN                              00000007
+IPR1                              00000F9F
+IPR2                              00000FA2
+IPR3                              00000FA5
+IPR4                              00000F90
+IPR5                              00000F99
+IRCF0                             00000004
+IRCF1                             00000005
+IRCF2                             00000006
+IRNG0                             00000000
+IRNG1                             00000001
+IRQM0                             00000005
+IRQM1                             00000006
+IRVST                             00000005
+ITRIM0                            00000002
+ITRIM1                            00000003
+ITRIM2                            00000004
+ITRIM3                            00000005
+ITRIM4                            00000006
+ITRIM5                            00000007
+KBI0                              00000004
+KBI1                              00000005
+KBI2                              00000006
+KBI3                              00000007
+LATA                              00000F89
+LATA0                             00000000
+LATA1                             00000001
+LATA2                             00000002
+LATA3                             00000003
+LATA5                             00000005
+LATA6                             00000006
+LATA7                             00000007
+LATB                              00000F8A
+LATB0                             00000000
+LATB1                             00000001
+LATB2                             00000002
+LATB3                             00000003
+LATB4                             00000004
+LATB5                             00000005
+LATB6                             00000006
+LATB7                             00000007
+LATC                              00000F8B
+LATC0                             00000000
+LATC1                             00000001
+LATC2                             00000002
+MPASM 5.76                  ADC_18F_MAIN.ASM   10-21-2019  0:13:00         PAGE 21
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+LATC3                             00000003
+LATC4                             00000004
+LATC5                             00000005
+LATC6                             00000006
+LATC7                             00000007
+LATD                              00000F8C
+LATD0                             00000000
+LATD1                             00000001
+LATD2                             00000002
+LATD3                             00000003
+LATD4                             00000004
+LATD5                             00000005
+LATD6                             00000006
+LATD7                             00000007
+LATE                              00000F8D
+LATE0                             00000000
+LATE1                             00000001
+LATE2                             00000002
+LVDIE                             00000002
+LVDIF                             00000002
+LVDIP                             00000002
+LVDSTAT                           00000006
+MODE0                             00000000
+MODE1                             00000001
+MODE16                            00000002
+MSK0                              00000000
+MSK1                              00000001
+MSK2                              00000002
+MSK3                              00000003
+MSK4                              00000004
+MSK5                              00000005
+MSK6                              00000006
+MSK7                              00000007
+N                                 00000004
+NOT_A                             00000005
+NOT_ADDRESS                       00000005
+NOT_BOR                           00000000
+NOT_CM                            00000005
+NOT_DONE                          00000001
+NOT_PD                            00000002
+NOT_POR                           00000001
+NOT_RBPU                          00000007
+NOT_RC8                           00000006
+NOT_RI                            00000004
+NOT_SS1                           00000005
+NOT_T1DONE                        00000003
+NOT_T1SYNC                        00000002
+NOT_T3SYNC                        00000002
+NOT_T5DONE                        00000003
+NOT_T5SYNC                        00000002
+NOT_TO                            00000003
+NOT_TX8                           00000006
+NOT_W                             00000002
+MPASM 5.76                  ADC_18F_MAIN.ASM   10-21-2019  0:13:00         PAGE 22
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+NOT_WRITE                         00000002
+OB0E                              00000000
+OB1E                              00000001
+OB2E                              00000002
+OB3E                              00000003
+OBE                               00000007
+OBUF                              00000006
+ODCON1                            00000F42
+ODCON2                            00000F41
+ODCON3                            00000F40
+OERR                              00000001
+OERR1                             00000001
+OERR2                             00000001
+OSC1                              00000007
+OSC2                              00000006
+OSCCON                            00000FD3
+OSCCON2                           00000F87
+OSCFIE                            00000007
+OSCFIF                            00000007
+OSCFIP                            00000007
+OSCTUNE                           00000F9B
+OSTS                              00000003
+OV                                00000003
+P                                 00000004
+P1DC0                             00000000
+P1DC1                             00000001
+P1DC2                             00000002
+P1DC3                             00000003
+P1DC4                             00000004
+P1DC5                             00000005
+P1DC6                             00000006
+P1M0                              00000006
+P1M1                              00000007
+P1RSEN                            00000007
+P2DC0                             00000000
+P2DC1                             00000001
+P2DC2                             00000002
+P2DC3                             00000003
+P2DC4                             00000004
+P2DC5                             00000005
+P2DC6                             00000006
+P2M0                              00000006
+P2M1                              00000007
+P2RSEN                            00000007
+P3DC0                             00000000
+P3DC1                             00000001
+P3DC2                             00000002
+P3DC3                             00000003
+P3DC4                             00000004
+P3DC5                             00000005
+P3DC6                             00000006
+P3M0                              00000006
+P3M1                              00000007
+MPASM 5.76                  ADC_18F_MAIN.ASM   10-21-2019  0:13:00         PAGE 23
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+P3RSEN                            00000007
+PADCFG1                           00000F3C
+PC                                00000FF9
+PCFG0                             00000000
+PCFG1                             00000001
+PCFG10                            00000002
+PCFG11                            00000003
+PCFG12                            00000004
+PCFG2                             00000002
+PCFG3                             00000003
+PCFG4                             00000004
+PCFG5                             00000005
+PCFG6                             00000006
+PCFG7                             00000007
+PCFG8                             00000000
+PCFG9                             00000001
+PCL                               00000FF9
+PCLATH                            00000FFA
+PCLATU                            00000FFB
+PD                                00000002
+PD0                               00000EB9
+PD1                               00000EBA
+PD2                               00000EBB
+PD3                               00000EBC
+PEIE                              00000006
+PEIE_GIEL                         00000006
+PEN                               00000002
+PGC                               00000006
+PGD                               00000007
+PIE1                              00000F9D
+PIE2                              00000FA0
+PIE3                              00000FA3
+PIE4                              00000F8E
+PIE5                              00000F91
+PIR1                              00000F9E
+PIR2                              00000FA1
+PIR3                              00000FA4
+PIR4                              00000F8F
+PIR5                              00000F98
+PLLEN                             00000006
+PLUSW0                            00000FEB
+PLUSW1                            00000FE3
+PLUSW2                            00000FDB
+PMA0                              00000005
+PMA1                              00000004
+PMA2                              00000003
+PMA3                              00000002
+PMA4                              00000007
+PMA5                              00000006
+PMA6                              00000000
+PMA7                              00000001
+PMADDRH                           00000F6F
+PMADDRL                           00000F6E
+MPASM 5.76                  ADC_18F_MAIN.ASM   10-21-2019  0:13:00         PAGE 24
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+PMBE                              00000001
+PMCONH                            00000F5F
+PMCONL                            00000F5E
+PMCS                              00000002
+PMD0                              00000000
+PMD1                              00000001
+PMD2                              00000002
+PMD3                              00000003
+PMD4                              00000004
+PMD5                              00000005
+PMD6                              00000006
+PMD7                              00000007
+PMDADC                            00000000
+PMDCCP10                          00000007
+PMDCCP4                           00000001
+PMDCCP5                           00000002
+PMDCCP6                           00000003
+PMDCCP7                           00000004
+PMDCCP8                           00000005
+PMDCCP9                           00000006
+PMDCMP1                           00000000
+PMDCMP2                           00000001
+PMDCMP3                           00000002
+PMDCTMU                           00000006
+PMDECCP1                          00000005
+PMDECCP2                          00000006
+PMDECCP3                          00000007
+PMDIN1H                           00000F6D
+PMDIN1L                           00000F6C
+PMDIN2H                           00000F59
+PMDIN2L                           00000F58
+PMDIS0                            00000EB9
+PMDIS1                            00000EBA
+PMDIS2                            00000EBB
+PMDIS3                            00000EBC
+PMDMSSP1                          00000001
+PMDMSSP2                          00000002
+PMDOUT1H                          00000F6F
+PMDOUT1L                          00000F6E
+PMDOUT2H                          00000F5B
+PMDOUT2L                          00000F5A
+PMDPSP                            00000007
+PMDRTCC                           00000005
+PMDTMR1                           00000001
+PMDTMR2                           00000002
+PMDTMR3                           00000003
+PMDTMR4                           00000004
+PMDTMR5                           00000003
+PMDTMR6                           00000004
+PMDTMR8                           00000006
+PMDUART1                          00000003
+PMDUART2                          00000004
+PMEH                              00000F57
+MPASM 5.76                  ADC_18F_MAIN.ASM   10-21-2019  0:13:00         PAGE 25
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+PMEL                              00000F56
+PMMODEH                           00000F5D
+PMMODEL                           00000F5C
+PMPBE                             00000001
+PMPCS                             00000002
+PMPEN                             00000007
+PMPIE                             00000007
+PMPIF                             00000007
+PMPIP                             00000007
+PMPRD                             00000000
+PMPTTL                            00000000
+PMPWR                             00000001
+PMRD                              00000000
+PMSTATH                           00000F55
+PMSTATL                           00000F54
+PMWR                              00000001
+POR                               00000001
+PORTA                             00000F80
+PORTB                             00000F81
+PORTC                             00000F82
+PORTD                             00000F83
+PORTE                             00000F84
+POSTDEC0                          00000FED
+POSTDEC1                          00000FE5
+POSTDEC2                          00000FDD
+POSTINC0                          00000FEE
+POSTINC1                          00000FE6
+POSTINC2                          00000FDE
+PPSCON                            00000EBF
+PR2                               00000FCB
+PR4                               00000F77
+PR6                               00000F1F
+PR8                               00000F1C
+PREINC0                           00000FEC
+PREINC1                           00000FE4
+PREINC2                           00000FDC
+PRISD                             00000002
+PROD                              00000FF3
+PRODH                             00000FF4
+PRODL                             00000FF3
+PSA                               00000003
+PSPMD                             00000007
+PSS1AC0                           00000002
+PSS1AC1                           00000003
+PSS1BD0                           00000000
+PSS1BD1                           00000001
+PSS2AC0                           00000002
+PSS2AC1                           00000003
+PSS2BD0                           00000000
+PSS2BD1                           00000001
+PSS3AC0                           00000002
+PSS3AC1                           00000003
+PSS3BD0                           00000000
+MPASM 5.76                  ADC_18F_MAIN.ASM   10-21-2019  0:13:00         PAGE 26
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+PSS3BD1                           00000001
+PSTR1CON                          00000FBF
+PSTR2CON                          00000FB9
+PSTR3CON                          00000F1A
+PTBEEN                            00000002
+PTEN0                             00000000
+PTEN1                             00000001
+PTEN10                            00000002
+PTEN11                            00000003
+PTEN12                            00000004
+PTEN13                            00000005
+PTEN14                            00000006
+PTEN15                            00000007
+PTEN2                             00000002
+PTEN3                             00000003
+PTEN4                             00000004
+PTEN5                             00000005
+PTEN6                             00000006
+PTEN7                             00000007
+PTEN8                             00000000
+PTEN9                             00000001
+PTRDEN                            00000000
+PTWREN                            00000001
+PWM1CON                           00000FBD
+PWM2CON                           00000FB7
+R                                 00000002
+RA0                               00000000
+RA1                               00000001
+RA2                               00000002
+RA3                               00000003
+RA5                               00000005
+RA6                               00000006
+RA7                               00000007
+RB0                               00000000
+RB1                               00000001
+RB2                               00000002
+RB3                               00000003
+RB4                               00000004
+RB5                               00000005
+RB6                               00000006
+RB7                               00000007
+RBIE                              00000003
+RBIF                              00000000
+RBIP                              00000000
+RBPU                              00000007
+RC0                               00000000
+RC1                               00000001
+RC1IE                             00000005
+RC1IF                             00000005
+RC1IP                             00000005
+RC2                               00000002
+RC2IE                             00000005
+RC2IF                             00000005
+MPASM 5.76                  ADC_18F_MAIN.ASM   10-21-2019  0:13:00         PAGE 27
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+RC2IP                             00000005
+RC3                               00000003
+RC4                               00000004
+RC5                               00000005
+RC6                               00000006
+RC7                               00000007
+RC8_9                             00000006
+RC9                               00000006
+RCD8                              00000000
+RCEN                              00000003
+RCIDL                             00000006
+RCIE                              00000005
+RCIF                              00000005
+RCIP                              00000005
+RCON                              00000FD0
+RCREG                             00000FAF
+RCREG1                            00000FAF
+RCREG2                            00000FAA
+RCSTA                             00000FAC
+RCSTA1                            00000FAC
+RCSTA2                            00000F9C
+RD0                               00000000
+RD1                               00000001
+RD16                              00000001
+RD2                               00000002
+RD3                               00000003
+RD4                               00000004
+RD5                               00000005
+RD6                               00000006
+RD7                               00000007
+RDPU                              00000007
+RDSP                              00000000
+RE0                               00000000
+RE1                               00000001
+RE2                               00000002
+READ_WRITE                        00000002
+REFO                              00000002
+REFOCON                           00000F3D
+REGSLP                            00000007
+RELEASE                           00000000
+REPU                              00000006
+RI                                00000004
+RODIV0                            00000000
+RODIV1                            00000001
+RODIV2                            00000002
+RODIV3                            00000003
+ROON                              00000007
+ROSEL                             00000004
+ROSSLP                            00000005
+RP0                               00000000
+RP1                               00000001
+RP10                              00000007
+RP11                              00000000
+MPASM 5.76                  ADC_18F_MAIN.ASM   10-21-2019  0:13:00         PAGE 28
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+RP12                              00000001
+RP13                              00000002
+RP14                              00000003
+RP15                              00000004
+RP16                              00000005
+RP17                              00000006
+RP18                              00000007
+RP19                              00000002
+RP2                               00000005
+RP20                              00000003
+RP21                              00000004
+RP22                              00000005
+RP23                              00000006
+RP24                              00000007
+RP3                               00000000
+RP4                               00000001
+RP5                               00000002
+RP6                               00000003
+RP7                               00000004
+RP8                               00000005
+RP9                               00000006
+RPINR1                            00000EE1
+RPINR12                           00000EF2
+RPINR13                           00000EF3
+RPINR14                           00000EF4
+RPINR15                           00000EE7
+RPINR16                           00000EF7
+RPINR17                           00000EF8
+RPINR2                            00000EE2
+RPINR21                           00000EFC
+RPINR22                           00000EFD
+RPINR23                           00000EFE
+RPINR24                           00000EFF
+RPINR3                            00000EE3
+RPINR4                            00000EE4
+RPINR6                            00000EE6
+RPINR7                            00000EE8
+RPINR8                            00000EE9
+RPINR9                            00000EEA
+RPOR0                             00000EC0
+RPOR1                             00000EC1
+RPOR10                            00000ECA
+RPOR11                            00000ECB
+RPOR12                            00000ECC
+RPOR13                            00000ECD
+RPOR14                            00000ECE
+RPOR15                            00000ECF
+RPOR16                            00000ED0
+RPOR17                            00000ED1
+RPOR18                            00000ED2
+RPOR19                            00000ED3
+RPOR2                             00000EC2
+RPOR20                            00000ED4
+MPASM 5.76                  ADC_18F_MAIN.ASM   10-21-2019  0:13:00         PAGE 29
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+RPOR21                            00000ED5
+RPOR22                            00000ED6
+RPOR23                            00000ED7
+RPOR24                            00000ED8
+RPOR3                             00000EC3
+RPOR4                             00000EC4
+RPOR5                             00000EC5
+RPOR6                             00000EC6
+RPOR7                             00000EC7
+RPOR8                             00000EC8
+RPOR9                             00000EC9
+RSEN                              00000001
+RTCC                              00000001
+RTCCAL                            00000F3E
+RTCCFG                            00000F3F
+RTCCIE                            00000000
+RTCCIF                            00000000
+RTCCIP                            00000000
+RTCCMD                            00000005
+RTCEN                             00000007
+RTCOE                             00000002
+RTCPTR0                           00000000
+RTCPTR1                           00000001
+RTCSYNC                           00000004
+RTCVALH                           00000F3B
+RTCVALL                           00000F3A
+RTCWDIS                           00000000
+RTCWREN                           00000005
+RTSECSEL0                         00000001
+RTSECSEL1                         00000002
+RX1                               00000007
+RX9                               00000006
+RX91                              00000006
+RX92                              00000006
+RX9D                              00000000
+RX9D1                             00000000
+RX9D2                             00000000
+RXADDRH                           00000F68
+RXADDRL                           00000F69
+RXDTP                             00000005
+RXINC                             00000004
+R_NOT_W                           00000002
+R_W                               00000002
+Reserved                          00000004
+S                                 00000003
+SCK1                              00000003
+SCL1                              00000003
+SCL2                              00000000
+SCS0                              00000000
+SCS1                              00000001
+SDA1                              00000004
+SDA2                              00000001
+SDI1                              00000004
+MPASM 5.76                  ADC_18F_MAIN.ASM   10-21-2019  0:13:00         PAGE 30
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+SDO1                              00000005
+SEN                               00000000
+SENDB                             00000003
+SENDB1                            00000003
+SENDB2                            00000003
+SMP                               00000007
+SOSCDRV                           00000004
+SOSCGO                            00000003
+SOSCRUN                           00000006
+SP0                               00000000
+SP1                               00000001
+SP2                               00000002
+SP3                               00000003
+SP4                               00000004
+SPBRG                             00000FB0
+SPBRG1                            00000FB0
+SPBRG2                            00000FAB
+SPBRGH                            00000F7F
+SPBRGH1                           00000F7F
+SPBRGH2                           00000F7D
+SPEN                              00000007
+SPEN1                             00000007
+SPEN2                             00000007
+SPI1MD                            00000001
+SPI1OD                            00000000
+SPI2MD                            00000002
+SPI2OD                            00000001
+SRC0                              00000000
+SRC1                              00000001
+SREN                              00000005
+SREN1                             00000005
+SREN2                             00000005
+SSCON0                            00000006
+SSCON1                            00000007
+SSP1ADD                           00000FC8
+SSP1BUF                           00000FC9
+SSP1CON1                          00000FC6
+SSP1CON2                          00000FC5
+SSP1IE                            00000003
+SSP1IF                            00000003
+SSP1IP                            00000003
+SSP1MSK                           00000FC8
+SSP1STAT                          00000FC7
+SSP2ADD                           00000F74
+SSP2BUF                           00000F75
+SSP2CON1                          00000F72
+SSP2CON2                          00000F71
+SSP2IE                            00000007
+SSP2IF                            00000007
+SSP2IP                            00000007
+SSP2MSK                           00000F74
+SSP2STAT                          00000F73
+SSPADD                            00000FC8
+MPASM 5.76                  ADC_18F_MAIN.ASM   10-21-2019  0:13:00         PAGE 31
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+SSPBUF                            00000FC9
+SSPCON1                           00000FC6
+SSPCON2                           00000FC5
+SSPEN                             00000005
+SSPIE                             00000003
+SSPIF                             00000003
+SSPIP                             00000003
+SSPM0                             00000000
+SSPM1                             00000001
+SSPM2                             00000002
+SSPM3                             00000003
+SSPOV                             00000006
+SSPSTAT                           00000FC7
+STATUS                            00000FD8
+STKFUL                            00000007
+STKOVF                            00000007
+STKPTR                            00000FFC
+STKUNF                            00000006
+STRA                              00000000
+STRB                              00000001
+STRC                              00000002
+STRD                              00000003
+STRSYNC                           00000004
+SWDTE                             00000000
+SWDTEN                            00000000
+SYNC                              00000004
+SYNC1                             00000004
+SYNC2                             00000004
+T08BIT                            00000006
+T0CON                             00000FD5
+T0CS                              00000005
+T0IE                              00000005
+T0IF                              00000002
+T0IP                              00000002
+T0PS0                             00000000
+T0PS1                             00000001
+T0PS2                             00000002
+T0SE                              00000004
+T1CKI                             00000000
+T1CKPS0                           00000004
+T1CKPS1                           00000005
+T1CON                             00000FCD
+T1DONE                            00000003
+T1GCON                            00000F9A
+T1GGO                             00000003
+T1GGO_NOT_T1DONE                  00000003
+T1GPOL                            00000006
+T1GSPM                            00000004
+T1GSS0                            00000000
+T1GSS1                            00000001
+T1GTM                             00000005
+T1GVAL                            00000002
+T1OSCEN                           00000003
+MPASM 5.76                  ADC_18F_MAIN.ASM   10-21-2019  0:13:00         PAGE 32
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+T1OSI                             00000001
+T1OSO                             00000000
+T2CKPS0                           00000000
+T2CKPS1                           00000001
+T2CON                             00000FCA
+T2OUTPS0                          00000003
+T2OUTPS1                          00000004
+T2OUTPS2                          00000005
+T2OUTPS3                          00000006
+T3CKPS0                           00000004
+T3CKPS1                           00000005
+T3CON                             00000F79
+T3DONE                            00000003
+T3GCON                            00000F97
+T3GGO                             00000003
+T3GGO_T3DONE                      00000003
+T3GPOL                            00000006
+T3GSPM                            00000004
+T3GSS0                            00000000
+T3GSS1                            00000001
+T3GTM                             00000005
+T3GVAL                            00000002
+T3OSCEN                           00000003
+T4CKPS0                           00000000
+T4CKPS1                           00000001
+T4CON                             00000F76
+T4OUTPS0                          00000003
+T4OUTPS1                          00000004
+T4OUTPS2                          00000005
+T4OUTPS3                          00000006
+T5CKPS0                           00000004
+T5CKPS1                           00000005
+T5CON                             00000F22
+T5DONE                            00000003
+T5GCON                            00000F21
+T5GGO                             00000003
+T5GGO_NOT_T5DONE                  00000003
+T5GPOL                            00000006
+T5GSPM                            00000004
+T5GSS0                            00000000
+T5GSS1                            00000001
+T5GTM                             00000005
+T5GVAL                            00000002
+T5OSCEN                           00000003
+T6CKPS0                           00000000
+T6CKPS1                           00000001
+T6CON                             00000F1E
+T6OUTPS0                          00000003
+T6OUTPS1                          00000004
+T6OUTPS2                          00000005
+T6OUTPS3                          00000006
+T8CKPS0                           00000000
+T8CKPS1                           00000001
+MPASM 5.76                  ADC_18F_MAIN.ASM   10-21-2019  0:13:00         PAGE 33
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+T8CON                             00000F1B
+T8OUTPS0                          00000003
+T8OUTPS1                          00000004
+T8OUTPS2                          00000005
+T8OUTPS3                          00000006
+TABLAT                            00000FF5
+TBLPTR                            00000FF6
+TBLPTRH                           00000FF7
+TBLPTRL                           00000FF6
+TBLPTRU                           00000FF8
+TGEN                              00000004
+TMR0                              00000FD6
+TMR0H                             00000FD7
+TMR0IE                            00000005
+TMR0IF                            00000002
+TMR0IP                            00000002
+TMR0L                             00000FD6
+TMR0ON                            00000007
+TMR1                              00000FCE
+TMR1CS0                           00000006
+TMR1CS1                           00000007
+TMR1GE                            00000007
+TMR1GIE                           00000000
+TMR1GIF                           00000000
+TMR1GIP                           00000000
+TMR1H                             00000FCF
+TMR1IE                            00000000
+TMR1IF                            00000000
+TMR1IP                            00000000
+TMR1L                             00000FCE
+TMR1MD                            00000001
+TMR1ON                            00000000
+TMR2                              00000FCC
+TMR2IE                            00000001
+TMR2IF                            00000001
+TMR2IP                            00000001
+TMR2MD                            00000002
+TMR2ON                            00000002
+TMR3                              00000F7A
+TMR3CS0                           00000006
+TMR3CS1                           00000007
+TMR3GE                            00000007
+TMR3GIE                           00000001
+TMR3GIF                           00000001
+TMR3GIP                           00000001
+TMR3H                             00000F7B
+TMR3IE                            00000001
+TMR3IF                            00000001
+TMR3IP                            00000001
+TMR3L                             00000F7A
+TMR3MD                            00000003
+TMR3ON                            00000000
+TMR4                              00000F78
+MPASM 5.76                  ADC_18F_MAIN.ASM   10-21-2019  0:13:00         PAGE 34
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+TMR4IE                            00000003
+TMR4IF                            00000003
+TMR4IP                            00000003
+TMR4MD                            00000004
+TMR4ON                            00000002
+TMR5CS0                           00000006
+TMR5CS1                           00000007
+TMR5GE                            00000007
+TMR5GIE                           00000001
+TMR5GIF                           00000001
+TMR5GIP                           00000001
+TMR5H                             00000F24
+TMR5IE                            00000002
+TMR5IF                            00000002
+TMR5IP                            00000002
+TMR5L                             00000F23
+TMR5MD                            00000003
+TMR5ON                            00000000
+TMR6                              00000F20
+TMR6IE                            00000003
+TMR6IF                            00000003
+TMR6IP                            00000003
+TMR6MD                            00000004
+TMR6ON                            00000002
+TMR8                              00000F1D
+TMR8IE                            00000004
+TMR8IF                            00000004
+TMR8IP                            00000004
+TMR8MD                            00000006
+TMR8ON                            00000002
+TO                                00000003
+TOS                               00000FFD
+TOSH                              00000FFE
+TOSL                              00000FFD
+TOSU                              00000FFF
+TRIGSEL0                          00000000
+TRIGSEL1                          00000001
+TRISA                             00000F92
+TRISA0                            00000000
+TRISA1                            00000001
+TRISA2                            00000002
+TRISA3                            00000003
+TRISA5                            00000005
+TRISA6                            00000006
+TRISA7                            00000007
+TRISB                             00000F93
+TRISB0                            00000000
+TRISB1                            00000001
+TRISB2                            00000002
+TRISB3                            00000003
+TRISB4                            00000004
+TRISB5                            00000005
+TRISB6                            00000006
+MPASM 5.76                  ADC_18F_MAIN.ASM   10-21-2019  0:13:00         PAGE 35
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+TRISB7                            00000007
+TRISC                             00000F94
+TRISC0                            00000000
+TRISC1                            00000001
+TRISC2                            00000002
+TRISC3                            00000003
+TRISC4                            00000004
+TRISC5                            00000005
+TRISC6                            00000006
+TRISC7                            00000007
+TRISD                             00000F95
+TRISD0                            00000000
+TRISD1                            00000001
+TRISD2                            00000002
+TRISD3                            00000003
+TRISD4                            00000004
+TRISD5                            00000005
+TRISD6                            00000006
+TRISD7                            00000007
+TRISE                             00000F96
+TRISE0                            00000000
+TRISE1                            00000001
+TRISE2                            00000002
+TRMT                              00000001
+TRMT1                             00000001
+TRMT2                             00000001
+TUN0                              00000000
+TUN1                              00000001
+TUN2                              00000002
+TUN3                              00000003
+TUN4                              00000004
+TUN5                              00000005
+TX1                               00000006
+TX1IE                             00000004
+TX1IF                             00000004
+TX1IP                             00000004
+TX2IE                             00000004
+TX2IF                             00000004
+TX2IP                             00000004
+TX8_9                             00000006
+TX9                               00000006
+TX91                              00000006
+TX92                              00000006
+TX9D                              00000000
+TX9D1                             00000000
+TX9D2                             00000000
+TXADDRH                           00000F6A
+TXADDRL                           00000F6B
+TXCKP                             00000004
+TXD8                              00000000
+TXEN                              00000005
+TXEN1                             00000005
+TXEN2                             00000005
+MPASM 5.76                  ADC_18F_MAIN.ASM   10-21-2019  0:13:00         PAGE 36
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+TXIE                              00000004
+TXIF                              00000004
+TXINC                             00000005
+TXIP                              00000004
+TXREG                             00000FAE
+TXREG1                            00000FAE
+TXREG2                            00000FA9
+TXSTA                             00000FAD
+TXSTA1                            00000FAD
+TXSTA2                            00000FA8
+U1OD                              00000000
+U2OD                              00000001
+UA                                00000001
+UART1MD                           00000003
+UART2MD                           00000004
+ULPEN                             00000002
+ULPLVL                            00000005
+ULPSINK                           00000001
+ULPWDIS                           00000002
+ULPWU                             00000000
+VBG                               00000001
+VBGEN                             00000007
+VBGOE                             00000004
+VCFG0                             00000006
+VCFG1                             00000007
+VDIRMAG                           00000007
+VREF_MINUS                        00000002
+VREF_PLUS                         00000003
+W                                 00000000
+WAITB0                            00000006
+WAITB1                            00000007
+WAITE0                            00000000
+WAITE1                            00000001
+WAITM0                            00000002
+WAITM1                            00000003
+WAITM2                            00000004
+WAITM3                            00000005
+WCOL                              00000007
+WDTCON                            00000FC0
+WPROG                             00000005
+WR                                00000001
+WREG                              00000FE8
+WREN                              00000002
+WRERR                             00000003
+WRSP                              00000001
+WUE                               00000001
+Z                                 00000002
+_DEVID1                           003FFFFE
+_DEVID2                           003FFFFF
+__18F47J13                        00000001
+channel_sel_and_go_read_loop      00000018
+
+MPASM 5.76                  ADC_18F_MAIN.ASM   10-21-2019  0:13:00         PAGE 37
+
+
+
+
+
+Errors   :     0
+Warnings :     0 reported,     0 suppressed
+Messages :     0 reported,     0 suppressed
+
+
